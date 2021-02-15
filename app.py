@@ -1,10 +1,40 @@
-from PIL import Image, ImageChops
+from cv2 import cv2
+from PIL import Image
+from numpy import asarray
 
-img =   Image.open('Level_1_data/wafer_image_1.png')
-img2=   Image.open('Level_1_data/wafer_image_2.png')
-img3=   Image.open('Level_1_data/wafer_image_3.png')
-img4=   Image.open('Level_1_data/wafer_image_4.png')
+url = './wafer_image_$.png'
+url_destination = './img_$_gray.jpg';
+image = []
+image_gray = []
 
-diff = ImageChops.difference(img, img2)
+for i in range (0, 5) :
 
-print(diff.getbbox())
+    current_url = url.replace('$', str(i + 1))
+    image.append(cv2.imread(current_url))
+    image_gray.append(cv2.cvtColor(image[i], cv2.COLOR_BGR2GRAY))
+
+for i in range (0, 5) :
+
+    current_url = url_destination.replace('$', str(i + 1))
+    cv2.imwrite(current_url, image_gray[i])
+
+
+for i in range(0, 5) :
+
+    current_url = url.replace('$', str(i + 1))
+    data = asarray(image[i])
+    print(type(data))
+    print(data.shape)
+
+    new_image = Image.fromarray(data)
+    print(type(new_image))
+    print(new_image.mode)
+    print(new_image.size)
+    print(data)
+    image2 = Image.fromarray(data)
+    row = len(data)
+    col = len(data[0])
+    for i in range(row):
+        for j in range(col):
+            if (data_1[i][j] != data_2[i][j]):
+                print(str(i) + " " + str(j))
