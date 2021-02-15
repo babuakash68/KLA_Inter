@@ -1,15 +1,10 @@
+from PIL import Image, ImageChops
 
- import cv2 
-# To read image from disk, we use
-# cv2.imread function, in below method,
-img = cv2.imread("wafer_image.png", cv2.IMREAD_COLOR)
- 
+img =   Image.open('Level_1_data/wafer_image_1.png')
+img2=   Image.open('Level_1_data/wafer_image_2.png')
+img3=   Image.open('Level_1_data/wafer_image_3.png')
+img4=   Image.open('Level_1_data/wafer_image_4.png')
 
-cv2.imshow("Cute Kitens", img)
- 
+diff = ImageChops.difference(img, img2)
 
-cv2.waitKey(0)
- 
-# It is for removing/deleting created GUI window from screen
-# and memory
-cv2.destroyAllWindows()
+print(diff.getbbox())
