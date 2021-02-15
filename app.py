@@ -1,40 +1,91 @@
-from cv2 import cv2
-from PIL import Image
+import PIL
+from PIL import Image, ImageChops
+
+import json
 from numpy import asarray
 
-url = './wafer_image_$.png'
-url_destination = './img_$_gray.jpg';
-image = []
-image_gray = []
+import json
 
-for i in range (0, 5) :
+with open('input.json') as f:
+      jason_data = json.load(f)
 
-    current_url = url.replace('$', str(i + 1))
-    image.append(cv2.imread(current_url))
-    image_gray.append(cv2.cvtColor(image[i], cv2.COLOR_BGR2GRAY))
+list1 = []
+print(jason_data)
+for i in range(5):
+    s1=("./wafer_image_"+str((i+1))+".png")
+    img =   asarray(Image.open(s1).convert('LA'))
+    list1.append([img])
+s1=("./wafer_image_"+str((i+1))+".png")
+img = asarray(Image.open(s1).convert('LA'))
+row = len(img)
+col = len(img[0])
+s1=("./wafer_image_"+str((i+1))+".png")
+img = asarray(Image.open(s1).convert('LA'))
+row = len(img)
+col = len(img[0])
+res = []
 
-for i in range (0, 5) :
+for i in range(4):
+    for j in range(row):
+        for k in range(col):
+            equal = 0
+            not_equal = 0
+            l=i+1
+            for l in range(4-i):
+               # print(list1[i + l + 1][j][k] - list1[i + l + 1][j][k])
+                # print(list1[i][0][j][k][1])
+                # print("t2", list1[i + l + 1][0][j][k][1])
+                if (list1[i][0][j][k][0] != list1[i + l + 1][0][j][k][0]) or (list1[i][0][j][k][1] != list1[i + l + 1][0][j][k][1]):
+                    # print("ano")
+                    not_equal += 1
+                else:
+                    # print("check")
+                    equal += 1
+            # print(not_equal, "---", equal)        
+            if(not_equal > equal):
+                # print('hello')
+                res.append([j , k , i + 1])
+print(res)
+res = []
 
-    current_url = url_destination.replace('$', str(i + 1))
-    cv2.imwrite(current_url, image_gray[i])
-
-
-for i in range(0, 5) :
-
-    current_url = url.replace('$', str(i + 1))
-    data = asarray(image[i])
-    print(type(data))
-    print(data.shape)
-
-    new_image = Image.fromarray(data)
-    print(type(new_image))
-    print(new_image.mode)
-    print(new_image.size)
-    print(data)
-    image2 = Image.fromarray(data)
-    row = len(data)
-    col = len(data[0])
-    for i in range(row):
-        for j in range(col):
-            if (data_1[i][j] != data_2[i][j]):
-                print(str(i) + " " + str(j))
+for i in range(5):
+    for j in range(row):
+        for k in range(col):
+            equal = 0
+            not_equal = 0
+            l=i+1
+            for l in range(4 - i):
+               # print(list1[i + l + 1][j][k] - list1[i + l + 1][j][k])
+                # print(list1[i][0][j][k][1])
+                # print("t2", list1[i + l + 1][0][j][k][1])
+                if (list1[i][0][j][k][0] != list1[i + l + 1][0][j][k][0]) or (list1[i][0][j][k][1] != list1[i + l + 1][0][j][k][1]):
+                    # print("ano")
+                    not_equal += 1
+                else:
+                    # print("check")
+                    equal += 1
+            # print(not_equal, "---", equal)        
+            if(not_equal > equal):
+                # print('hello')
+                res.append([j , k , i + 1])
+    for j in range(row):
+        for k in range(col):
+            equal = 0
+            not_equal = 0
+            for l in range(4):
+               # print(list1[i + l + 1][j][k] - list1[i + l + 1][j][k])
+                # print(list1[i][0][j][k][1])
+                # print("t2", list1[i + l + 1][0][j][k][1])
+                if (list1[4][0][j][k][0] != list1[l][0][j][k][0]) or (list1[4][0][j][k][1] != list1[l][0][j][k][1]):
+                    # print("ano")
+                    not_equal += 1
+                else:
+                    # print("check")
+                    equal += 1
+            # print(not_equal, "---", equal)        
+            if(not_equal > equal):
+                # print('hello')
+                res.append([j , k , i + 1])
+ 
+s=open("output.csv",)
+s.write(str(res))
